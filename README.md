@@ -142,4 +142,4 @@ src/test/java
 
 En total son 22 escenarios.
 
-El informe con la estrategia de automatización está en [docs/informe.txt](docs/informe.txt).
+El informe con la estrategia de automatización está en [INFORME.txt](INFORME.txt).
