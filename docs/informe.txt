@@ -1,0 +1,61 @@
+INFORME - ESTRATEGIA DE AUTOMATIZACION
+
+1. HERRAMIENTAS
+
+- Karate DSL 2.1.3
+- JUnit 6
+- Java 21
+- Maven
+
+
+2. ESTRATEGIA
+
+Se creo un archivo feature por cada endpoint de la API de usuarios:
+
+- listar-usuarios.feature      GET    /usuarios
+- registrar-usuario.feature    POST   /usuarios
+- buscar-usuario.feature       GET    /usuarios/{_id}
+- actualizar-usuario.feature   PUT    /usuarios/{_id}
+- eliminar-usuario.feature     DELETE /usuarios/{_id}
+
+Asi cada feature corresponde a uno de los criterios de aceptacion de la
+historia de usuario.
+
+En cada endpoint se probaron casos positivos (con datos validos) y casos
+negativos (datos invalidos, campos vacios, IDs que no existen, email
+repetido). En los casos negativos se valida el codigo de respuesta y
+tambien el mensaje de error de la API.
+
+ServeRest es una API publica, por eso las pruebas no dependen de usuarios
+que ya existan. Cada escenario crea el usuario que necesita y lo elimina
+al terminar. De esta forma las pruebas se pueden ejecutar varias veces
+sin problemas.
+
+3. PATRONES Y BUENAS PRACTICAS
+
+- Uso de Background
+
+- Helpers: crear-usuario.feature y eliminar-usuario.feature se reutilizan
+  desde otros escenarios con "call read". Tienen el tag @ignore para que
+  no se ejecuten solos.
+
+- Generacion de datos: data-generator.js crea un usuario con nombre y
+  email unicos usando la fecha y un numero aleatorio.
+
+- Scenario Outline
+
+- Validacion de esquemas: en la carpeta schemas estan los JSON con la
+  estructura esperada de las respuestas (#string, #number, #array, #regex).
+
+- Configuracion: la URL base esta en karate-config.js. Si cambia el
+  ambiente solo se modifica ahi.
+
+
+4. OBSERVACIONES DE LA API
+
+- El PUT con un ID que no existe no da error, crea un usuario nuevo
+  (status 201).
+- El DELETE con un ID que no existe responde status 200 con el mensaje
+  "Nenhum registro excluido".
+- Los errores de validacion responden status 400 y los mensajes estan en
+  portugues.
